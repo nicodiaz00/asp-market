@@ -28,8 +28,7 @@
                     <label for="ddlCampo" class="ms-2">Campo</label>
                     <asp:DropDownList runat="server" ID="ddlCampo"
                         AutoPostBack="true"
-
-                        CssClass="btn btn-primary btn-sm dropdown-toggle ms-2">
+                        CssClass="btn btn-primary btn-sm dropdown-toggle ms-2" OnSelectedIndexChanged="ddlCampo_SelectedIndexChanged">
                     </asp:DropDownList>
 
                     <label for="ddlCriterio" class="ms-2">Criterio</label>
@@ -41,10 +40,25 @@
                     <asp:TextBox runat="server" ID="txtFiltro"
                         CssClass="form-control form-control-sm ms-2"
                         Style="width: 150px;"> </asp:TextBox>
+                    <asp:RegularExpressionValidator runat="server"
+                        ID="regexValidator"
+                        ControlToValidate="txtFiltro"
+                        ValidationExpression="^[\p{L}\p{N} ]+$"
+                        ErrorMessage="Solo se permiten letras y números."
+                        CssClass="text-danger"
+                        Display="Dynamic"
+                        ValidationGroup="BusquedaAvanzada" />
+                    <asp:RequiredFieldValidator runat="server" ID="reqValidator"
+                        ControlToValidate="txtFiltro"
+                        ErrorMessage="El filtro es obligatorio."
+                        CssClass="text-danger ms-2"
+                        Display="Dynamic"
+                        ValidationGroup="BusquedaAvanzada"
+                        Enabled="false" />
 
                     <asp:Button Text="Buscar" runat="server" ID="btnBuscarAvanzado"
                         CssClass="btn btn-primary btn-sm ms-3"
-                         />
+                        ValidationGroup="BusquedaAvanzada" />
 
                 </div>
 
