@@ -24,23 +24,16 @@ namespace WebApplication1
 
         private void configurarBusquedaAvanzada(bool estadoAvanzado)
         {
-            
+
             ddlCampo.Enabled = estadoAvanzado;
             ddlCriterio.Enabled = estadoAvanzado;
             txtFiltro.Enabled = estadoAvanzado;
             btnBuscarAvanzado.Enabled = estadoAvanzado;
             txtBusqueda.Enabled = !estadoAvanzado;
             btnBuscar.Enabled = !estadoAvanzado;
+            txtFiltro.Text = "";
 
-            if(regexValidator != null)
-            {
-                regexValidator.Enabled = estadoAvanzado;
-            }
-            if(regexValidator != null)
-            {
-                reqValidator.Enabled = estadoAvanzado;
-            }
-            
+
         }
         private void actualizarCriterio(string campo)
         {
@@ -48,39 +41,43 @@ namespace WebApplication1
             txtBusqueda.Text = "";
             txtFiltro.Text = "";
 
+            // 1. Lógica para TEXTO
             if (campo == "Codigo" || campo == "Nombre")
             {
                 txtFiltro.TextMode = TextBoxMode.SingleLine;
-                if (regexValidator != null)
-                {
-                    // Preferir una expresión real. ".*" acepta todo; si no quieres validar, deshabilita el validador.
-                    regexValidator.ValidationExpression = @"^[\p{L}\p{N} ]+$";
-                    regexValidator.ErrorMessage = "Solo se permiten números y letras.";
-                    regexValidator.Enabled = true;
-                }
+
                 ddlCriterio.Items.Add("Empieza");
                 ddlCriterio.Items.Add("Contiene");
                 ddlCriterio.Items.Add("Termina");
+
+                // ACTIVAR validador de letras, DESACTIVAR el de números
+                regexLetras.Enabled = true;
+                regexNumeros.Enabled = false;
             }
+            // 2. Lógica para NÚMEROS
             else
             {
-                if (regexValidator != null)
-                {
-                    // Deshabilitar validación cuando no corresponde
-                    regexValidator.Enabled = true;
-                    //txtFiltro.TextMode = System.Web.UI.WebControls.TextBoxMode.Number;
-                    txtFiltro.TextMode = TextBoxMode.Number;
-                    regexValidator.ValidationExpression = "^[0-9]+(\\.[0-9]+)?$";
-                    regexValidator.ErrorMessage = "Solo se permiten números y puntos.";
-                }
+                txtFiltro.TextMode = TextBoxMode.Number;
+
                 ddlCriterio.Items.Add("Igual a");
                 ddlCriterio.Items.Add("Mayor a");
                 ddlCriterio.Items.Add("Menor a");
+
+                // DESACTIVAR validador de letras, ACTIVAR el de números
+                regexLetras.Enabled = false;
+                regexNumeros.Enabled = true;
             }
+        }
+        private List<Articulo> filtrarArticulos(string campo, string criterio, string filtro)
+        {
+            ArticuloNegocio negocio = new ArticuloNegocio();
+            List<Articulo> listaFiltrada = new List<Articulo>();
+
+            return negocio.filtrarArticulo(campo, criterio, filtro);
         }
         protected void Page_Load(object sender, EventArgs e)
         {
-            if(!IsPostBack)
+            if (!IsPostBack)
             {
                 dvgArticulo.DataSource = new ArticuloNegocio().listarArticulo();
                 dvgArticulo.DataBind();
@@ -110,6 +107,25 @@ namespace WebApplication1
         {
             string campoSeleccionado = ddlCampo.SelectedValue;
             actualizarCriterio(campoSeleccionado);
+        }
+
+        protected void btnBuscarAvanzado_Click(object sender, EventArgs e)
+        {
+            string campo = ddlCampo.SelectedValue;
+            string criterio = ddlCriterio.SelectedValue;
+            string filtro = txtFiltro.Text;
+
+            try
+            {
+                List<Articulo> listaFiltrada = filtrarArticulos(campo, criterio, filtro);
+                dvgArticulo.DataSource = listaFiltrada;
+                dvgArticulo.DataBind();
+            }
+            catch (Exception ex)
+            {
+
+                Session.Add("error", ex.ToString());
+            }
         }
     }
 }

@@ -40,25 +40,23 @@
                     <asp:TextBox runat="server" ID="txtFiltro"
                         CssClass="form-control form-control-sm ms-2"
                         Style="width: 150px;"> </asp:TextBox>
-                    <asp:RegularExpressionValidator runat="server"
-                        ID="regexValidator"
+                    <asp:RegularExpressionValidator runat="server" ID="regexLetras"
                         ControlToValidate="txtFiltro"
-                        ValidationExpression="^[\p{L}\p{N} ]+$"
+                        ValidationExpression="^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚ]+$"
                         ErrorMessage="Solo se permiten letras y números."
-                        CssClass="text-danger"
-                        Display="Dynamic"
-                        ValidationGroup="BusquedaAvanzada" />
-                    <asp:RequiredFieldValidator runat="server" ID="reqValidator"
+                        CssClass="text-danger" Display="Dynamic" ValidationGroup="BusquedaAvanzada"
+                        Enabled="false" />
+
+                    <asp:RegularExpressionValidator runat="server" ID="regexNumeros"
                         ControlToValidate="txtFiltro"
-                        ErrorMessage="El filtro es obligatorio."
-                        CssClass="text-danger ms-2"
-                        Display="Dynamic"
-                        ValidationGroup="BusquedaAvanzada"
+                        ValidationExpression="^[0-9]+([.,][0-9]+)?$"
+                        ErrorMessage="Solo números (use coma o punto)."
+                        CssClass="text-danger" Display="Dynamic" ValidationGroup="BusquedaAvanzada"
                         Enabled="false" />
 
                     <asp:Button Text="Buscar" runat="server" ID="btnBuscarAvanzado"
                         CssClass="btn btn-primary btn-sm ms-3"
-                        ValidationGroup="BusquedaAvanzada" />
+                        ValidationGroup="BusquedaAvanzada" OnClick="btnBuscarAvanzado_Click" />
 
                 </div>
 
@@ -70,26 +68,30 @@
     </div>
     <div class="row g-4 py-5 row-cols-1 row-cols-lg-4 vh-80">
         <div class="col flex-column w-100 border rounded-3 overflow-hidden">
+            <asp:UpdatePanel runat="server">
+                <ContentTemplate>
 
-            <contenttemplate>
-                <asp:GridView runat="server" ID="dvgArticulo" AutoGenerateColumns="false" CssClass="table table-light table-striped table-hover mb-0" OnSelectedIndexChanged="dvgArticulo_SelectedIndexChanged" DataKeyNames="Id" OnPageIndexChanging="dvgArticulo_PageIndexChanging" AllowPaging="true" PageSize="5" GridLines="None">
-                    <Columns>
-                        <asp:BoundField HeaderText="ID" DataField="Id" ItemStyle-CssClass="d-none" HeaderStyle-CssClass="d-none" />
-                        <asp:BoundField HeaderText="CODIGO" DataField="Codigo" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
-                        <asp:BoundField HeaderText="NOMBRE" DataField="Nombre" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
-                        <asp:BoundField HeaderText="DESCRIPCIÓN" DataField="Descripcion" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
-                        <asp:BoundField HeaderText="IDMARCA" DataField="Marca.Id" ItemStyle-CssClass="d-none" HeaderStyle-CssClass="d-none" />
-                        <asp:BoundField HeaderText="IDCATEGORIA" DataField="Categoria.Id" ItemStyle-CssClass="d-none" HeaderStyle-CssClass="d-none" />
-                        <asp:BoundField HeaderText="CATEGORIA" DataField="Categoria" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
-                        <asp:BoundField HeaderText="MARCA" DataField="Marca" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
-                        <asp:BoundField HeaderText="IMAGEN" DataField="ImagenUrl" ItemStyle-CssClass="d-none" HeaderStyle-CssClass="d-none" />
-                        <asp:BoundField HeaderText="PRECIO" DataField="Precio" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
-                        <asp:CommandField ShowSelectButton="true" HeaderText="EDITAR" SelectText="✍️" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
 
-                    </Columns>
-                </asp:GridView>
 
-            </contenttemplate>
+
+                    <asp:GridView runat="server" ID="dvgArticulo" AutoGenerateColumns="false" CssClass="table table-light table-striped table-hover mb-0" OnSelectedIndexChanged="dvgArticulo_SelectedIndexChanged" DataKeyNames="Id" OnPageIndexChanging="dvgArticulo_PageIndexChanging" AllowPaging="true" PageSize="5" GridLines="None">
+                        <Columns>
+                            <asp:BoundField HeaderText="ID" DataField="Id" ItemStyle-CssClass="d-none" HeaderStyle-CssClass="d-none" />
+                            <asp:BoundField HeaderText="CODIGO" DataField="Codigo" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
+                            <asp:BoundField HeaderText="NOMBRE" DataField="Nombre" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
+                            <asp:BoundField HeaderText="DESCRIPCIÓN" DataField="Descripcion" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
+                            <asp:BoundField HeaderText="IDMARCA" DataField="Marca.Id" ItemStyle-CssClass="d-none" HeaderStyle-CssClass="d-none" />
+                            <asp:BoundField HeaderText="IDCATEGORIA" DataField="Categoria.Id" ItemStyle-CssClass="d-none" HeaderStyle-CssClass="d-none" />
+                            <asp:BoundField HeaderText="CATEGORIA" DataField="Categoria" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
+                            <asp:BoundField HeaderText="MARCA" DataField="Marca" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
+                            <asp:BoundField HeaderText="IMAGEN" DataField="ImagenUrl" ItemStyle-CssClass="d-none" HeaderStyle-CssClass="d-none" />
+                            <asp:BoundField HeaderText="PRECIO" DataField="Precio" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
+                            <asp:CommandField ShowSelectButton="true" HeaderText="EDITAR" SelectText="✍️" ItemStyle-CssClass="" HeaderStyle-CssClass="" />
+
+                        </Columns>
+                    </asp:GridView>
+                </ContentTemplate>
+            </asp:UpdatePanel>
 
 
         </div>
