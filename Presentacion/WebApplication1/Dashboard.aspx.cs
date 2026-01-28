@@ -81,6 +81,23 @@ namespace WebApplication1
             return negocio.filtroArticuloSimple(txtBusqueda.Text);
 
         }
+
+        private void actualizarDgv()
+        {
+            ArticuloNegocio articuloNegocio = new ArticuloNegocio();
+
+            if(txtFiltro.Text != "")
+            {
+                dvgArticulo.DataSource = articuloNegocio.filtrarArticulo(ddlCampo.SelectedValue, ddlCriterio.SelectedValue, txtFiltro.Text);
+                dvgArticulo.DataBind();
+                
+            }
+            else
+            {
+                dvgArticulo.DataSource = articuloNegocio.listarArticulo();
+                dvgArticulo.DataBind();
+            }
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -101,7 +118,16 @@ namespace WebApplication1
 
         protected void dvgArticulo_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
+            try
+            {
+                dvgArticulo.PageIndex = e.NewPageIndex;
+                actualizarDgv();
+            }
+            catch (Exception ex)
+            {
 
+                Session.Add("error", ex.ToString());
+            }
         }
 
         protected void checkBusquedaAvanzada_CheckedChanged(object sender, EventArgs e)
