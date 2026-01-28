@@ -34,9 +34,9 @@
                             </p>                        
 
                         </div>
-                        <div class="card-footer text-muted">
-                            <asp:Button runat="server" ID="btnIdArticulo" CssClass="btn btn-info" CommandArgument='<%#Eval("Id")%>' CommandName="IdArticulo" OnClick="btnIdArticulo_Click" Text="Seleccionar" />
-                            <asp:Button runat="server" ID="btnFavorito" Text="Detalle" CssClass="btn btn-info" CommandArgument='<%#Eval("Id")%>' CommandName="IdArticulo" OnClick="btnFavorito_Click" />
+                        <div class="card-footer text-muted d-flex align-items-center justify-content-center">
+                            <asp:Button runat="server" ID="btnIdArticulo" CssClass="btn btn-outline-secondary m-1" CommandArgument='<%#Eval("Id")%>' CommandName="IdArticulo" OnClick="btnIdArticulo_Click" Text="Seleccionar" />
+                            <asp:Button runat="server" ID="btnFavorito" Text="Detalle" CssClass="btn btn-outline-secondary m-1" CommandArgument='<%#Eval("Id")%>' CommandName="IdArticulo" OnClick="btnFavorito_Click" />
                         </div>
                     </div>
                 </div>

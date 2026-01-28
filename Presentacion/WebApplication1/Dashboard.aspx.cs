@@ -75,6 +75,12 @@ namespace WebApplication1
 
             return negocio.filtrarArticulo(campo, criterio, filtro);
         }
+        private List<Articulo> buscarArticulos(string textoBusqueda)
+        {
+            ArticuloNegocio negocio = new ArticuloNegocio();         
+            return negocio.filtroArticuloSimple(txtBusqueda.Text);
+
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -126,6 +132,23 @@ namespace WebApplication1
 
                 Session.Add("error", ex.ToString());
             }
+        }
+
+        protected void btnBuscar_Click(object sender, EventArgs e)
+        {
+            string textoBusqueda = txtBusqueda.Text;
+            try
+            {
+                
+                List<Articulo> listaFiltrada = buscarArticulos(textoBusqueda);
+                dvgArticulo.DataSource = listaFiltrada;
+                dvgArticulo.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+            }
+
         }
     }
 }
