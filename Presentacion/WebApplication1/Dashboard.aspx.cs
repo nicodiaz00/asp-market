@@ -24,7 +24,6 @@ namespace WebApplication1
 
         private void configurarBusquedaAvanzada(bool estadoAvanzado)
         {
-
             ddlCampo.Enabled = estadoAvanzado;
             ddlCriterio.Enabled = estadoAvanzado;
             txtFiltro.Enabled = estadoAvanzado;
@@ -32,8 +31,6 @@ namespace WebApplication1
             txtBusqueda.Enabled = !estadoAvanzado;
             btnBuscar.Enabled = !estadoAvanzado;
             txtFiltro.Text = "";
-
-
         }
         private void actualizarCriterio(string campo)
         {
@@ -45,25 +42,18 @@ namespace WebApplication1
             if (campo == "Codigo" || campo == "Nombre")
             {
                 txtFiltro.TextMode = TextBoxMode.SingleLine;
-
                 ddlCriterio.Items.Add("Empieza");
                 ddlCriterio.Items.Add("Contiene");
-                ddlCriterio.Items.Add("Termina");
-
-                // ACTIVAR validador de letras, DESACTIVAR el de números
+                ddlCriterio.Items.Add("Termina");             
                 regexLetras.Enabled = true;
                 regexNumeros.Enabled = false;
-            }
-            // 2. Lógica para NÚMEROS
+            }        
             else
             {
                 txtFiltro.TextMode = TextBoxMode.Number;
-
                 ddlCriterio.Items.Add("Igual a");
                 ddlCriterio.Items.Add("Mayor a");
-                ddlCriterio.Items.Add("Menor a");
-
-                // DESACTIVAR validador de letras, ACTIVAR el de números
+                ddlCriterio.Items.Add("Menor a");           
                 regexLetras.Enabled = false;
                 regexNumeros.Enabled = true;
             }
@@ -113,7 +103,10 @@ namespace WebApplication1
 
         protected void dvgArticulo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            string id = dvgArticulo.SelectedDataKey.Value.ToString();
 
+            // Redireccionas pasando el ID por URL
+            Response.Redirect("Edit.aspx?id=" + id);
         }
 
         protected void dvgArticulo_PageIndexChanging(object sender, GridViewPageEventArgs e)
