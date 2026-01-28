@@ -25,7 +25,7 @@
         </div>
         <div class="col-12">
             <label class="form-label">Precio</label>
-            <asp:TextBox runat="server" ID="txtPrecio" CssClass="form-control" TextMode="Number" />
+            <asp:TextBox runat="server" ID="txtPrecio" CssClass="form-control" TextMode="SingleLine" />
         </div>
         <div class="col-12">
             <label class="form-label">Marca</label>
