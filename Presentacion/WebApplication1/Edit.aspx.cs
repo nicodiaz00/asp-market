@@ -11,6 +11,25 @@ namespace WebApplication1
 {
     public partial class Edit : System.Web.UI.Page
     {
+        private void listarMarcas()
+        {
+            MarcaNegocio marcaNegocio = new MarcaNegocio();
+            
+                ddMarca.DataSource = marcaNegocio.listarMarcas();
+                ddMarca.DataTextField = "DescripcionMarca";
+                ddMarca.DataValueField = "Id";
+                ddMarca.DataBind();
+                        
+        }
+        private void listarCategorias()
+        {
+            CategoriaNegocio categoriaNegocio = new CategoriaNegocio();
+                ddCategoria.DataSource = categoriaNegocio.listarCategoria();
+                ddCategoria.DataTextField = "DescripcionCategoria";
+                ddCategoria.DataValueField = "Id";
+                ddCategoria.DataBind();
+
+        }
         private void CargarArticuloEdicion(string idArticulo)
         {
             ArticuloNegocio articuloNegocio = new ArticuloNegocio();
@@ -23,13 +42,13 @@ namespace WebApplication1
                 txtPrecio.Text = articulo.Precio.ToString();
                 txtImagen.Text= articulo.ImagenUrl;
                 imgArticulo.ImageUrl = articulo.ImagenUrl;
-                
-
+                ddMarca.SelectedValue = articulo.Marca.Id.ToString();
+                ddMarca.Text = articulo.Marca.DescripcionMarca;
+                ddCategoria.SelectedValue = articulo.Categoria.Id.ToString();
+                ddCategoria.Text = articulo.Categoria.DescripcionCategoria;
 
             }
             
-
-
         }
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -42,6 +61,9 @@ namespace WebApplication1
                     string idArticulo = Request.QueryString["id"];
                     if (!string.IsNullOrEmpty(idArticulo))
                     {
+                        
+                        listarMarcas();
+                        listarCategorias();
                         CargarArticuloEdicion(idArticulo);
                     }
                 }
@@ -52,6 +74,16 @@ namespace WebApplication1
                 }
                 
             }
+        }
+
+        protected void btnGuardar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnCancelar_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Default.aspx",false);
         }
     }
 }
