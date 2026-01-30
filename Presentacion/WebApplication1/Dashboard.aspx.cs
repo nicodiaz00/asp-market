@@ -44,16 +44,16 @@ namespace WebApplication1
                 txtFiltro.TextMode = TextBoxMode.SingleLine;
                 ddlCriterio.Items.Add("Empieza");
                 ddlCriterio.Items.Add("Contiene");
-                ddlCriterio.Items.Add("Termina");             
+                ddlCriterio.Items.Add("Termina");
                 regexLetras.Enabled = true;
                 regexNumeros.Enabled = false;
-            }        
+            }
             else
             {
                 txtFiltro.TextMode = TextBoxMode.Number;
                 ddlCriterio.Items.Add("Igual a");
                 ddlCriterio.Items.Add("Mayor a");
-                ddlCriterio.Items.Add("Menor a");           
+                ddlCriterio.Items.Add("Menor a");
                 regexLetras.Enabled = false;
                 regexNumeros.Enabled = true;
             }
@@ -67,7 +67,7 @@ namespace WebApplication1
         }
         private List<Articulo> buscarArticulos(string textoBusqueda)
         {
-            ArticuloNegocio negocio = new ArticuloNegocio();         
+            ArticuloNegocio negocio = new ArticuloNegocio();
             return negocio.filtroArticuloSimple(txtBusqueda.Text);
 
         }
@@ -76,11 +76,11 @@ namespace WebApplication1
         {
             ArticuloNegocio articuloNegocio = new ArticuloNegocio();
 
-            if(txtFiltro.Text != "")
+            if (txtFiltro.Text != "")
             {
                 dvgArticulo.DataSource = articuloNegocio.filtrarArticulo(ddlCampo.SelectedValue, ddlCriterio.SelectedValue, txtFiltro.Text);
                 dvgArticulo.DataBind();
-                
+
             }
             else
             {
@@ -100,7 +100,12 @@ namespace WebApplication1
                 // Cargar datos iniciales si es necesario
             }
         }
-
+        private void eliminarArticulo(string id)
+        {
+            ArticuloNegocio negocio = new ArticuloNegocio();
+            negocio.eliminarArticulo(int.Parse(id));
+        }
+        
         protected void dvgArticulo_SelectedIndexChanged(object sender, EventArgs e)
         {
             string id = dvgArticulo.SelectedDataKey.Value.ToString();
@@ -108,7 +113,7 @@ namespace WebApplication1
             // Redireccionas pasando el ID por URL
             Response.Redirect("Edit.aspx?id=" + id);
         }
-
+        
         protected void dvgArticulo_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             try
@@ -158,7 +163,7 @@ namespace WebApplication1
             string textoBusqueda = txtBusqueda.Text;
             try
             {
-                
+
                 List<Articulo> listaFiltrada = buscarArticulos(textoBusqueda);
                 dvgArticulo.DataSource = listaFiltrada;
                 dvgArticulo.DataBind();
@@ -168,6 +173,25 @@ namespace WebApplication1
                 Session.Add("error", ex.ToString());
             }
 
+        }
+
+        protected void dvgArticulo_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Editar" || e.CommandName == "Eliminar")
+            {
+                string id = e.CommandArgument.ToString();
+                switch (e.CommandName)
+                {
+                    case "Editar":
+                        Response.Redirect("Edit.aspx?id=" + id);
+                        break;
+
+                    case "Eliminar":
+                        eliminarArticulo(id);
+                        actualizarDgv();
+                        break;
+                }
+            }
         }
     }
 }

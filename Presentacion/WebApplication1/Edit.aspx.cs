@@ -11,6 +11,7 @@ namespace WebApplication1
 {
     public partial class Edit : System.Web.UI.Page
     {
+        private string urlImagen = "https://tse3.mm.bing.net/th/id/OIP.3Wpv91fvc8FukJX-gslWbgHaHa?rs=1&pid=ImgDetMain&o=7&rm=3";
         private void listarMarcas()
         {
             MarcaNegocio marcaNegocio = new MarcaNegocio();
@@ -40,8 +41,19 @@ namespace WebApplication1
                 txtNombre.Text = articulo.Nombre;
                 txtDescripcion.Text = articulo.Descripcion;
                 txtPrecio.Text = articulo.Precio.ToString();
-                txtImagen.Text= articulo.ImagenUrl;
-                imgArticulo.ImageUrl = articulo.ImagenUrl;
+
+                if (!string.IsNullOrEmpty(articulo.ImagenUrl) && (articulo.ImagenUrl.StartsWith("http") || articulo.ImagenUrl.StartsWith("https")))
+                {
+                    txtImagen.Text = articulo.ImagenUrl;
+                    imgArticulo.ImageUrl = articulo.ImagenUrl;
+
+                }
+                else
+                {
+                    txtImagen.Text = urlImagen;
+                    imgArticulo.ImageUrl = urlImagen;
+                }
+                   
                 ddMarca.SelectedValue = articulo.Marca.Id.ToString();
                 ddMarca.Text = articulo.Marca.DescripcionMarca;
                 ddCategoria.SelectedValue = articulo.Categoria.Id.ToString();
@@ -49,6 +61,12 @@ namespace WebApplication1
 
             }
             
+        }
+        private void editarArticulo()
+        {
+            string idArticulo = Request.QueryString["id"];
+            ArticuloNegocio articuloNegocio = new ArticuloNegocio();
+            articuloNegocio.editarArticulo(txtCodigo.Text, txtNombre.Text,txtDescripcion.Text,int.Parse(ddMarca.SelectedValue), int.Parse(ddCategoria.SelectedValue), txtImagen.Text, decimal.Parse(txtPrecio.Text),int.Parse(idArticulo));
         }
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -70,7 +88,7 @@ namespace WebApplication1
                 catch (Exception ex)
                 {
 
-                    throw;
+                    Session.Add("error", ex.ToString());
                 }
                 
             }
@@ -78,7 +96,16 @@ namespace WebApplication1
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
+            try
+            {
+                editarArticulo();
+                Response.Redirect("Default.aspx", false);
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)

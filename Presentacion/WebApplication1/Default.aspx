@@ -26,7 +26,7 @@
             <ItemTemplate>
                 <div class="col">
                     <div class="card h-80">
-                        <img src="<%#Eval("ImagenUrl") %>" class="card-img-top w-75 mx-auto d-block" style="height: 200px; object-fit: contain;" alt="...">
+                        <img src="<%#Eval("ImagenUrl") %>" class="card-img-top w-75 mx-auto d-block" style="height: 200px; object-fit: contain;" alt="..." onerror="this.src='https://static.vecteezy.com/system/resources/previews/012/942/784/non_2x/broken-image-icon-isolated-on-a-white-background-no-image-symbol-for-web-and-mobile-apps-free-vector.jpg'; this.onerror=null";/>
                         <div class="card-body">
                             <h5 class="card-title"><%#Eval("Nombre")%></h5>
                             <p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
